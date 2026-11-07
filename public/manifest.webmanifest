@@ -1,0 +1,16 @@
+﻿{
+  "name": "MATW-PROJECT - Gestion des élèves",
+  "short_name": "MATW",
+  "description": "Gestion des élèves du centre MATW-PROJECT",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "fr",
+  "background_color": "#e6f5fb",
+  "theme_color": "#1a9fd6",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

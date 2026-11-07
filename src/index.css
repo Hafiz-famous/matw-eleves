@@ -1,0 +1,12 @@
+﻿@import "tailwindcss";
+
+@theme {
+  --color-matw: #1a9fd6;
+  --color-matw-dark: #0f7fb0;
+  --color-matw-light: #e6f5fb;
+}
+
+body {
+  background: #f9fafb;
+  -webkit-tap-highlight-color: transparent;
+}
