@@ -59,7 +59,7 @@ async function envoyerPhoto(fichier, dossier) {
   return chemin
 }
 
-export default function EleveForm({ session }) {
+export default function EleveForm({ session, profil }) {
   const { id } = useParams()
   const navigate = useNavigate()
 
@@ -216,7 +216,7 @@ export default function EleveForm({ session }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header session={session} />
+      <Header session={session} profil={profil} />
 
       <main className="max-w-3xl mx-auto p-4">
         <Link

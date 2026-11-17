@@ -62,9 +62,10 @@ function Personne({ nom, detail, telephone }) {
   )
 }
 
-export default function EleveDetail({ session }) {
+export default function EleveDetail({ session, profil }) {
   const { id } = useParams()
   const navigate = useNavigate()
+  const estAdmin = profil?.role === 'admin'
 
   async function telechargerFiche() {
     setPdfEnCours(true)
@@ -116,7 +117,7 @@ export default function EleveDetail({ session }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header session={session} />
+      <Header session={session} profil={profil} />
 
       <main className="max-w-5xl mx-auto p-4">
         <Link to="/" className="inline-block text-matw-dark hover:underline mb-3">
@@ -134,18 +135,22 @@ export default function EleveDetail({ session }) {
             >
               {pdfEnCours ? 'Création du PDF...' : 'Télécharger la fiche (PDF)'}
             </button>
-            <Link
-              to={`/eleves/${id}/modifier`}
-              className="bg-matw hover:bg-matw-dark text-white font-semibold rounded-lg px-4 py-2 text-sm"
-            >
-              Modifier
-            </Link>
-            <button
-              onClick={supprimer}
-              className="bg-white border border-red-300 text-red-600 hover:bg-red-50 font-semibold rounded-lg px-4 py-2 text-sm"
-            >
-              Supprimer
-            </button>
+            {estAdmin && (
+              <>
+                <Link
+                  to={`/eleves/${id}/modifier`}
+                  className="bg-matw hover:bg-matw-dark text-white font-semibold rounded-lg px-4 py-2 text-sm"
+                >
+                  Modifier
+                </Link>
+                <button
+                  onClick={supprimer}
+                  className="bg-white border border-red-300 text-red-600 hover:bg-red-50 font-semibold rounded-lg px-4 py-2 text-sm"
+                >
+                  Supprimer
+                </button>
+              </>
+            )}
           </div>
         )}
         {erreur && <p className="text-red-600">{erreur}</p>}

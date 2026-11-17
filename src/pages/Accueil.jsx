@@ -13,7 +13,8 @@ function normaliser(texte) {
     .replace(/[\u0300-\u036f]/g, '')
 }
 
-export default function Accueil({ session }) {
+export default function Accueil({ session, profil }) {
+  const estAdmin = profil?.role === 'admin'
   const [eleves, setEleves] = useState([])
   const [chargement, setChargement] = useState(true)
   const [erreur, setErreur] = useState('')
@@ -70,7 +71,7 @@ export default function Accueil({ session }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header session={session} />
+      <Header session={session} profil={profil} />
 
       <main className="max-w-5xl mx-auto p-4">
         <div className="flex items-center justify-between mb-3">
@@ -84,12 +85,14 @@ export default function Accueil({ session }) {
             {pdfEnCours ? 'Création du PDF...' : 'Télécharger la liste (PDF)'}
           </button>
         </div>
-          <Link
-            to="/eleves/nouveau"
-            className="bg-matw hover:bg-matw-dark text-white font-semibold rounded-lg px-4 py-2"
-          >
-            + Nouvel élève
-          </Link>
+          {estAdmin && (
+            <Link
+              to="/eleves/nouveau"
+              className="bg-matw hover:bg-matw-dark text-white font-semibold rounded-lg px-4 py-2"
+            >
+              + Nouvel élève
+            </Link>
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2 mb-4">

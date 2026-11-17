@@ -59,7 +59,8 @@ function construire(rows, periode) {
   return { vals, ids }
 }
 
-export default function SaisieNotes({ session }) {
+export default function SaisieNotes({ session, profil, classesEnseignant }) {
+  const classesDisponibles = profil?.role === 'enseignant' ? classesEnseignant : CLASSES
   const [matieres, setMatieres] = useState([])
   const [classe, setClasse] = useState('')
   const [periode, setPeriode] = useState(PERIODES[0])
@@ -301,7 +302,7 @@ export default function SaisieNotes({ session }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header session={session} />
+      <Header session={session} profil={profil} />
 
       <main className="max-w-6xl mx-auto p-4">
         <h2 className="text-xl font-bold text-matw-dark mb-3">Notes et bulletins</h2>
@@ -316,7 +317,7 @@ export default function SaisieNotes({ session }) {
             }}
           >
             <option value="">Choisir la classe...</option>
-            {CLASSES.map((c) => (
+            {classesDisponibles.map((c) => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>
@@ -346,6 +347,12 @@ export default function SaisieNotes({ session }) {
           </p>
         )}
         {chargement && <p className="text-gray-500">Chargement...</p>}
+
+        {classesDisponibles.length === 0 && (
+          <p className="text-gray-500 py-8 text-center">
+            Aucune classe ne vous est attribuée pour le moment.
+          </p>
+        )}
 
         {classe && !chargement && matieresClasse.length === 0 && (
           <p className="text-gray-500 py-8 text-center">
