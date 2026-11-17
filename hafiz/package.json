@@ -1,0 +1,22 @@
+{
+  "name": "hafiz",
+  "private": true,
+  "version": "0.1.0",
+  "description": "HAFIZ – Votre Assistant IA Intelligent",
+  "workspaces": [
+    "packages/*",
+    "apps/api",
+    "apps/web"
+  ],
+  "scripts": {
+    "build:shared": "npm run build -w @hafiz/shared",
+    "dev:api": "npm run dev -w @hafiz/api",
+    "dev:web": "npm run dev -w @hafiz/web",
+    "build": "npm run build:shared && npm run build -w @hafiz/api && npm run build -w @hafiz/web",
+    "typecheck": "npm run build:shared && npm run typecheck -w @hafiz/api && npm run typecheck -w @hafiz/web",
+    "test": "npm run build:shared && npm run test -w @hafiz/api"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}
