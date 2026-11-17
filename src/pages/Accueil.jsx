@@ -4,6 +4,7 @@ import { supabase } from '../supabase'
 import { CLASSES } from '../constantes'
 import Header from '../components/Header'
 import EleveCard from '../components/EleveCard'
+import { pdfListeClasse } from '../utils/pdf'
 
 function normaliser(texte) {
   return (texte || '')
@@ -19,6 +20,7 @@ export default function Accueil({ session }) {
   const [recherche, setRecherche] = useState('')
   const [classe, setClasse] = useState('')
   const [statut, setStatut] = useState('actif')
+  const [pdfEnCours, setPdfEnCours] = useState(false)
 
   useEffect(() => {
     supabase
@@ -31,6 +33,29 @@ export default function Accueil({ session }) {
         setChargement(false)
       })
   }, [])
+
+  async function telechargerListe() {
+    setPdfEnCours(true)
+    try {
+      let req = supabase
+        .from('eleves')
+        .select('*, tuteurs(*), contacts_urgence(*)')
+        .order('nom')
+      if (classe) req = req.eq('classe', classe)
+      if (statut) req = req.eq('statut', statut)
+      const { data, error } = await req
+      if (error) throw error
+      const affiches = new Set(elevesFiltres.map((e) => e.id))
+      const liste = data.filter((e) => affiches.has(e.id))
+      const titre =
+        (classe || 'Toutes les classes') +
+        (statut === 'actif' ? ' (actifs)' : statut === 'inactif' ? ' (inactifs)' : '')
+      await pdfListeClasse(liste, titre)
+    } catch (e) {
+      setErreur('Impossible de créer le PDF : ' + e.message)
+    }
+    setPdfEnCours(false)
+  }
 
   const elevesFiltres = useMemo(() => {
     const q = normaliser(recherche)
@@ -49,7 +74,16 @@ export default function Accueil({ session }) {
 
       <main className="max-w-5xl mx-auto p-4">
         <div className="flex items-center justify-between mb-3">
+          <div className="flex flex-wrap items-center gap-3">
           <h2 className="text-xl font-bold text-matw-dark">Élèves</h2>
+          <button
+            onClick={telechargerListe}
+            disabled={pdfEnCours || elevesFiltres.length === 0}
+            className="bg-white border border-matw text-matw-dark hover:bg-matw-light rounded-lg px-3 py-1.5 text-sm disabled:opacity-50"
+          >
+            {pdfEnCours ? 'Création du PDF...' : 'Télécharger la liste (PDF)'}
+          </button>
+        </div>
           <Link
             to="/eleves/nouveau"
             className="bg-matw hover:bg-matw-dark text-white font-semibold rounded-lg px-4 py-2"
@@ -110,3 +144,7 @@ export default function Accueil({ session }) {
     </div>
   )
 }
+
+
+
+

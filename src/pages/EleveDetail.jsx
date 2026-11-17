@@ -2,6 +2,7 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../supabase'
 import Header from '../components/Header'
+import { pdfFicheEleve } from '../utils/pdf'
 import { useUrlPhoto } from '../utils/photos'
 
 function calculerAge(dateNaissance) {
@@ -65,6 +66,16 @@ export default function EleveDetail({ session }) {
   const { id } = useParams()
   const navigate = useNavigate()
 
+  async function telechargerFiche() {
+    setPdfEnCours(true)
+    try {
+      await pdfFicheEleve(eleve)
+    } catch (e) {
+      setErreur('Impossible de créer le PDF : ' + e.message)
+    }
+    setPdfEnCours(false)
+  }
+
   async function supprimer() {
     const ok = window.confirm(
       `Supprimer définitivement ${eleve.prenom} ${eleve.nom} ? Cette action est irréversible.`
@@ -80,6 +91,7 @@ export default function EleveDetail({ session }) {
   const [eleve, setEleve] = useState(null)
   const [chargement, setChargement] = useState(true)
   const [erreur, setErreur] = useState('')
+  const [pdfEnCours, setPdfEnCours] = useState(false)
   const urlPhoto = useUrlPhoto(eleve?.photo_url)
   const urlFamille = useUrlPhoto(eleve?.photo_famille_url)
 
@@ -114,7 +126,14 @@ export default function EleveDetail({ session }) {
         {chargement && <p className="text-gray-500">Chargement...</p>}
 
         {eleve && (
-          <div className="flex gap-2 mb-3">
+          <div className="flex flex-wrap gap-2 mb-3">
+            <button
+              onClick={telechargerFiche}
+              disabled={pdfEnCours}
+              className="bg-white border border-matw text-matw-dark hover:bg-matw-light font-semibold rounded-lg px-4 py-2 text-sm disabled:opacity-60"
+            >
+              {pdfEnCours ? 'Création du PDF...' : 'Télécharger la fiche (PDF)'}
+            </button>
             <Link
               to={`/eleves/${id}/modifier`}
               className="bg-matw hover:bg-matw-dark text-white font-semibold rounded-lg px-4 py-2 text-sm"
@@ -259,6 +278,10 @@ export default function EleveDetail({ session }) {
     </div>
   )
 }
+
+
+
+
 
 
 

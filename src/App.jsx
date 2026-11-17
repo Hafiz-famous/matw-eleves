@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Accueil from './pages/Accueil'
 import EleveDetail from './pages/EleveDetail'
 import EleveForm from './pages/EleveForm'
+import SaisieNotes from './pages/SaisieNotes'
 
 export default function App() {
   const [session, setSession] = useState(undefined)
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/eleves/nouveau" element={<EleveForm session={session} />} />
         <Route path="/eleves/:id" element={<EleveDetail session={session} />} />
         <Route path="/eleves/:id/modifier" element={<EleveForm session={session} />} />
+        <Route path="/notes" element={<SaisieNotes session={session} />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>

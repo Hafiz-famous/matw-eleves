@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MATW Élèves</string>
+    <string name="title_activity_main">MATW Élèves</string>
+    <string name="package_name">org.matw.eleves</string>
+    <string name="custom_url_scheme">org.matw.eleves</string>
+</resources>

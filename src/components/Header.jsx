@@ -1,5 +1,10 @@
-﻿import { Link } from 'react-router-dom'
+﻿import { Link, NavLink } from 'react-router-dom'
 import { supabase } from '../supabase'
+
+const lien = ({ isActive }) =>
+  `px-3 py-2 text-sm font-medium border-b-2 ${
+    isActive ? 'border-white' : 'border-transparent opacity-80 hover:opacity-100'
+  }`
 
 export default function Header({ session }) {
   return (
@@ -19,6 +24,10 @@ export default function Header({ session }) {
           </button>
         </div>
       </div>
+      <nav className="max-w-5xl mx-auto flex gap-1 px-3 border-t border-white/20">
+        <NavLink to="/" end className={lien}>Élèves</NavLink>
+        <NavLink to="/notes" className={lien}>Notes</NavLink>
+      </nav>
     </header>
   )
 }
